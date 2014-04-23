@@ -1,3 +1,4 @@
+`timescale 1ps / 1ps
 module Data_memory(MemRead, MemWrite, address, WriteData, ReadData, mode);
 output [15:0] ReadData;
 input [15:0] address;

@@ -1,5 +1,6 @@
+`timescale 1ps / 1ps
 module Instruction_memory(Read_address, INST);
-parameter filename = "test_fact.txt";
+parameter filename = "All_inst.txt";
 output [31:0] INST;
 input [15:0] Read_address;
 reg [7:0] Mem[0:65535];
