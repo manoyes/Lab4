@@ -1,24 +1,7 @@
 `timescale 1ps / 1ps
-module ALU(INST,D_out,Old_PC,New_PC,Over_Flow,RegDst, ALUSrc, MemtoReg, RegWrite, MemRead, MemWrite, Branch, Jump, ALUOp1, ALUOp0);
-output [15:0] D_out;
-output Over_Flow;
-input[15:0] Old_PC;
-output[15:0] New_PC;
-reg[15:0] PC_4,PC_immediate,Jump_target;
-reg ALU_op_zero;
-input [31:0] INST;
-input RegDst, ALUSrc, MemtoReg, RegWrite, MemRead, MemWrite, Branch, Jump, ALUOp1, ALUOp0;
-reg [15:0] Registers[0:15];
-wire [15:0] DataMemory_ReadData;
-reg OF;
-reg [5:0] op_code, funct;
-reg [4:0] op1_addr, op2_addr, op3_addr, shamt;
-reg [15:0] ReadData1, ReadData2,Alu_output, Alu_operand2, Effective_address, DataMemory_WriteData;
-reg [15:0] Immed;
-reg mode;
-reg [31:0] Prod_reg;
+module ALU(in1, in2, ALUOperation, Zero, ALUResult);
 
-Data_memory DM(MemRead, MemWrite, Effective_address, DataMemory_WriteData, DataMemory_ReadData, mode);
+/*
 initial // we will put some values in the registers to test the ALU
 begin
 Registers[4'b0000] = 0;
@@ -38,30 +21,59 @@ Registers[4'b1101] = 500;
 Registers[4'b1110] = 140;
 Registers[4'b1111] = 9999;
 end
+*/
 
-always @(INST)
-begin
-op_code = INST[31:26];
-op1_addr = INST[25:21];
-#2 ReadData1 = Registers[op1_addr];
-op2_addr = INST[20:16];
-ReadData2 = Registers[op2_addr];
+  // ===== INPUTS =====
+  input [15:0] in1;
+  input [15:0] in2;
+  input [3:0] ALUOperation;
 
-op3_addr = RegDst==0?INST[20:16]:INST[15:11];
-shamt = INST[10:6];
-funct = INST[5:0];
-OF = 0;
-Immed = INST[15:0];
-Alu_operand2 = ALUSrc==0?ReadData2:Immed;
-PC_4 = Old_PC + 4;
-PC_immediate = PC_4 + 4*Immed;
-Jump_target = 4*Immed;
-ALU_op_zero = 0;
+  // ===== OUTPUTS =====
+  output Zero;
+  output ALUResult;
 
-if ({ALUOp1, ALUOp0}==2'b00)
-begin
- Alu_output = ReadData1 + Alu_operand2;
-if(Jump==1'b0) //is it a Jump
+  reg Zero;
+  reg [15:0] ALUResult;
+
+  always @(in1 or in2 or ALUOperation) begin
+
+    case (ALUOperation)
+      6'b000001 : ALUResult = in1 + in2; // ADD, ADDI, LB, LH, SB, SH
+      6'b000010 : ALUResult = in1 - in2; // SUB, BEQ, BGEZ
+      6'b000011 : ALUResult = in1 & in2; // AND, ANDI
+      6'b000100 : ALUResult = ~(in1 | in2); // NOR
+      6'b000101 : ALUResult = in1 | in2; // OR, ORI
+      6'b000111 : ALUResult = in2; // LUI
+      6'b001000 : ALUResult = (in1 < in2)? 1 : 0; // SLT, SLTI
+      //6'b001001 : ALUResult = (in1 == in2) ? 1 : 0; // BEQ
+      //6'b001010 : Zero = (in1 >= in2) ? 1 : 0; // BGEZ
+      //6'b000000 : ALUResult = in1 + in2; // LB
+      //6'b000000 : ALUResult = in1 + in2; // LH
+      //6'b000000 : ALUResult = in1 + in2; // SB
+      //6'b000000 : ALUResult = in1 + in2; // SH
+      //6'b001011 : ALUResult = in1 / in2; // DIV
+      //6'b001100 : ALUResult = in1 * in2; // MULT
+      //6'b001101 : ALUResult = Prod_reg[31:16]; // MFHI
+      //6'b001110 : ALUResult = Prod_reg[15:0]; // MFLO
+      6'b001111 : ALUResult = in1 << in2; // SLL
+      6'b010000 : ALUResult = in1 >> in2; // SRL
+      //6'b000000 : ALUResult = in1 + in2; // JR
+     //6'b000000 : ALUResult = in1 + in2; // JAL
+  
+    endcase 
+    
+    Zero = (ALUResult == 0) ? 1 : 0;
+  
+  end
+endmodule
+
+
+/*
+always @(INST) begin
+
+if ({ALUOp1, ALUOp0}==2'b00) begin
+  Alu_output = ReadData1 + Alu_operand2;
+if(Jump==1'b0) //is it a Jump 
 begin
 	case (op_code) // load or store
 		6'b100000: //lb
@@ -172,11 +184,8 @@ if((RegWrite==1)&(op3_addr!=0))
 
 $display("Old_PC = %h, INST = %h, ALU Output = %d --- (%h)H",Old_PC, INST,D_out,D_out);
 end
+
 assign New_PC = Jump? Jump_target : ((ALU_op_zero&Branch)? PC_immediate:PC_4);
 assign {D_out, Over_Flow} = {MemtoReg==0?Alu_output:DataMemory_ReadData , OF}; 
 endmodule
-
-
-
-
-
+*/

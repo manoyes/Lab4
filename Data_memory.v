@@ -1,20 +1,24 @@
 `timescale 1ps / 1ps
 module Data_memory(MemRead, MemWrite, address, WriteData, ReadData, mode);
-output [15:0] ReadData;
+
 input [15:0] address;
 input [15:0] WriteData;
-input mode;
 input MemRead, MemWrite;
+input mode;
+
+output [15:0] ReadData;
+
 reg [7:0] Mem[0:65535];
 reg [7:0] a1,a2;
+
 initial $readmemb("DataMem.txt",Mem); 
-initial
-begin
-a1 = 0;
-a2 = 0;
+
+initial begin
+  a1 = 0;
+  a2 = 0;
 end
-always @(address)
-begin
+
+always @(address) begin
 if(address!=0)
 	if(MemRead==1)
 	begin
