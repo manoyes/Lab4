@@ -73,7 +73,8 @@ module CPU;
               .WriteRgAddr   (RegDst ? Instruction[15:11] : Instruction[20:16]), 
               .WriteData     (WriteData), 
               .ReadData1     (ReadData1), 
-              .ReadData2     (ReadData2));
+              .ReadData2     (ReadData2),
+              .RegWrite      (RegWrite));
 
   MemToRegMux M2RM(.clk       (clk),
                    .ReadData  (ReadData),
