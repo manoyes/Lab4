@@ -27,10 +27,6 @@ module ALU(clk, in1, in2, ALUOperation, Zero, ALUResult);
       ALU_SLT : ALUResult = (in1 < in2)? 1 : 0; // SLT, SLTI
       //6'b001001 : ALUResult = (in1 == in2) ? 1 : 0; // BEQ
       //6'b001010 : Zero = (in1 >= in2) ? 1 : 0; // BGEZ
-      //6'b000000 : ALUResult = in1 + in2; // LB
-      //6'b000000 : ALUResult = in1 + in2; // LH
-      //6'b000000 : ALUResult = in1 + in2; // SB
-      //6'b000000 : ALUResult = in1 + in2; // SH
       //6'b001011 : ALUResult = in1 / in2; // DIV
       //6'b001100 : ALUResult = in1 * in2; // MULT
       //6'b001101 : ALUResult = Prod_reg[31:16]; // MFHI
@@ -44,7 +40,7 @@ module ALU(clk, in1, in2, ALUOperation, Zero, ALUResult);
     
     Zero = (ALUResult == 0) ? 1 : 0; // BEQ, BEGZ
   
-    $display("ALUResult=%b",ALUResult);
+    $display("in1: %d in2: %d ALUResult=%d",in1, in2,ALUResult);
   end
 endmodule
 

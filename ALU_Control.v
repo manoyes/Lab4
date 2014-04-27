@@ -11,7 +11,7 @@ module ALU_Control(clk, ALUOp, Function, Operation);
   reg [OP_SIZE-1:0] Operation;
   
   always @(ALUOp or Function) begin
-    #3 case (ALUOp)
+    case (ALUOp)
       2'b00 : begin // Load/Store
           Operation = ALU_ADD; // ADD
       end

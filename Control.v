@@ -20,7 +20,7 @@ reg [0:9] control_bits;
 initial
 control_bits = 10'b0000000000;
 
-always @(posedge clk) begin
+always @(Opcode) begin
   case (Opcode)
     OP_RTYPE: control_bits = 10'b1001000010; // R-type (Do I need 10'b1001000110 for jr?)
    	

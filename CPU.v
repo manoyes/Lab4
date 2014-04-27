@@ -45,7 +45,7 @@ module CPU;
   end  
   
   always
-    #10 clk = !clk;
+    #5 clk = !clk;
   
   Program_Counter     PC(.clk           (clk),
                          .rst           (rst),
@@ -84,7 +84,7 @@ module CPU;
   
   ALU alu(.clk             (clk),
           .in1            (ReadData1), 
-          .in2            (ALUSrc ? Instruction[15-0] : ReadData2), 
+          .in2            (ALUSrc ? Instruction[15:0] : ReadData2), 
           .ALUOperation   (ALUOperation), 
           .Zero           (Zero),
           .ALUResult      (ALUResult));
@@ -97,7 +97,7 @@ module CPU;
                  .ReadData    (ReadData),
                  .mode        (mode));
 
-initial
-  $monitor($time, "PC=%b ALUResult=%b Instruction=%b ALUResult=%b", OldPC, ALUResult, Instruction, ALUResult);
+//initial
+  //$monitor($time, "PC=%b ALUResult=%b Instruction=%b ALUResult=%b", OldPC, ALUResult, Instruction, ALUResult);
 
 endmodule
