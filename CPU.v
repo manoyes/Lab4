@@ -80,6 +80,7 @@ module CPU;
   ALU_Control alu_control (.clk         (clk),
                            .ALUOp       (ALUOp),
                            .Function    (Instruction[5:0]),
+                           .Opcode      (Instruction[31:26]),
                            .Operation   (ALUOperation));
   
   ALU alu(.clk             (clk),

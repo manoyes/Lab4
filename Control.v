@@ -34,7 +34,7 @@ always @(Opcode) begin
 		OP_BGEZ:  control_bits = 10'b0000001001;	//bgez
     
     OP_ADDI:  control_bits = 10'b0101000011;	//I-type addi
-		OP_ORI:   control_bits = 10'b0101000011;	//I-type ORi
+		OP_ORI:   control_bits = 10'b0101000011; //I-type ORi
 		OP_ANDI:  control_bits = 10'b0101000011;	//I-type andi
 		OP_SLTI:  control_bits = 10'b0101000011;	//I-type slti
 		OP_LUI:   control_bits = 10'b0101000011;	//I-type lui

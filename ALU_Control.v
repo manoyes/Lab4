@@ -1,10 +1,11 @@
-module ALU_Control(clk, ALUOp, Function, Operation);
+module ALU_Control(clk, ALUOp, Function, Opcode, Operation);
 
   `include "parameters.v"
 
   input clk;
   input [1:0] ALUOp;  
   input [FUNC_SIZE-1:0] Function;
+  input [OP_SIZE-1:0] Opcode;
   
   output [OP_SIZE-1:0] Operation;
   
@@ -27,13 +28,22 @@ module ALU_Control(clk, ALUOp, Function, Operation);
             F_OR : Operation = ALU_OR;        
             F_SLT : Operation = ALU_SLT;
         
-          //6'b011010 : Operation = 6'b001011; // div	
-          //6'b011000 : Operation = 6'b001100; // mult       				
-          //6'b010000 : Operation = 6'b001101; // mfhi
-          //6'b010010 : Operation = 6'b001110; // mflo
-          //6'b000000 : Operation = 6'b001111; // sll
-          //6'b000010 : Operation = 6'b010000; // srl
+          //F_DIV : Operation = ALU_DIV; // div	
+          //F_MULT : Operation = ALU_MULT; // mult       				
+          //F_MFHI : Operation = ALU_MFHI; // mfhi
+          //F_MFLO : Operation = ALU_MFLO; // mflo
+            F_SLL : Operation = ALU_SLL; // sll
+            F_SRL : Operation = ALU_SRL; // srl
           //6'b001000 : Operation = 6'b000001; // jr, jal
+        endcase
+      end
+      2'b11 : begin // I-type
+        case (Opcode)
+            OP_ADDI :  Operation = ALU_ADD;
+    		      OP_ORI  :  Operation = ALU_OR;
+		        OP_ANDI :  Operation = ALU_AND;
+		        OP_SLTI :  Operation = ALU_SLT;
+  		        OP_LUI  :  Operation = ALU_LUI;
         endcase
       end
     endcase
