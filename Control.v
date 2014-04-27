@@ -47,7 +47,7 @@ always @(posedge clk) begin
   endcase  
   
   case (Function)
-    F_JR   :   control_bits = 12'b100100001010; //jr
+    F_JR   :   control_bits = 12'b100100011010; //jr
   endcase
 end
 

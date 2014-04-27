@@ -23,6 +23,7 @@ module Program_Counter(clk, rst, NewAddress, ReadAddress);
       ReadAddress = inst_address;
     end
     
+    $display("==============================");
     $display("ReadAddress is: %d", ReadAddress);
   end
 endmodule

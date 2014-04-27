@@ -35,8 +35,6 @@ module ALU(clk, in1, in2, ALUOperation, Zero, ALUResult, shamt);
       ALU_MFLO : ALUResult = Prod_reg[15:0]; // MFLO
       ALU_SLL : ALUResult = in2 << shamt; // SLL
       ALU_SRL : ALUResult = in2 >> shamt; // SRL
-      //6'b000000 : ALUResult = in1 + in2; // JR
-     //6'b000000 : ALUResult = in1 + in2; // JAL
   
     endcase
   

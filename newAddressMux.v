@@ -20,14 +20,14 @@ module newAddressMux (clk, Jump, OldPC, JumpOffset, Branch, Zero, BranchOffset, 
   always @(posedge clk) begin 
     #9 if (Jump) begin
           if (JumpFromReg) begin
-            NewPC = ReadData1;
+            NewPC = ReadData1; // jr
           end else begin
-            NewPC = {OldPC + 4, JumpOffset << 2};
+            NewPC = {OldPC + 4, JumpOffset << 2}; // j or jal
           end
        end else if (Branch & Zero) begin
-          NewPC = (OldPC + 4) + (BranchOffset << 2);
+          NewPC = (OldPC + 4) + (BranchOffset << 2); // branches
        end else begin
-          NewPC = (OldPC + 4);
+          NewPC = (OldPC + 4); // sequential increment
        end
     
     //NewPC = Jump ? {OldPC + 4, JumpOffset << 2} : 

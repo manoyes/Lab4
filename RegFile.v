@@ -22,8 +22,10 @@ reg [ADDR_WIDTH-1:0] ReadData2;
 
 reg [REG_SIZE-1:0] datastore[ADDR_WIDTH-1:0]; // Memory storage
 
-initial // we will put some values in the registers to test the ALU
-begin
+initial begin // we will put some values in the registers to test the ALU
+
+// These register values are used for testing the instructions (except for beq, jr and jal)
+
 datastore[4'b0000] = 0;
 datastore[4'b0001] = 10;
 datastore[4'b0010] = 20;
@@ -40,6 +42,25 @@ datastore[4'b1100] = 120;
 datastore[4'b1101] = 500;
 datastore[4'b1110] = 140;
 datastore[4'b1111] = 9999;
+
+
+// These values are used for the factorial bonus. Set sim time to 1760 ns.
+/*      datastore[1] = 0;
+      datastore[2] = 0;
+      datastore[3] = 0;
+      datastore[4] = 0;
+      datastore[5] = 0;
+      datastore[6] = 0;
+      datastore[7] = 0;
+      datastore[8] = 0;            
+      datastore[9] = 0;
+      datastore[10] = 0;
+      datastore[11] = 0;
+      datastore[12] = 65535;
+      datastore[13] = 65535;
+      datastore[14] = 65535;
+      datastore[15] = 56;
+    */  
 end
 
   // WRITE TO DATA STORE
@@ -71,12 +92,15 @@ end
     ReadData2 = datastore[ReadRgAddr2];  
     $display("Reading register %d is: %d, register %d is: %d", ReadRgAddr1, ReadData1, ReadRgAddr2, ReadData2);  
     
-    if (WriteRgAddr > 4'b0000 && RegWrite) // R0 is hardwired to 0, writing to it discards the value.
-        #5 if (Opcode == OP_JAL)
+    #5 if (RegWrite) begin // R0 is hardwired to 0, writing to it discards the value.
+        if (Opcode == OP_JAL) begin
             datastore[RETURN_REGISTER] = WriteData;
-        else
-              datastore[WriteRgAddr] = WriteData; 
-        $display("Updated register %d is: %d", WriteRgAddr, datastore[WriteRgAddr]);
+            $display("Updated return register: %d", datastore[RETURN_REGISTER]);
+        end else if (WriteRgAddr > 4'b0000) begin
+           datastore[WriteRgAddr] = WriteData; 
+          $display("Updated register %d is: %d", WriteRgAddr, datastore[WriteRgAddr]);
+        end
+      end
     
   end
 endmodule
