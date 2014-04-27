@@ -1,6 +1,8 @@
-`timescale 1ps / 1ps
-module Instruction_memory(ReadAddress, Instruction);
+module Instruction_memory(clk, ReadAddress, Instruction);
 
+`include "parameters.v"
+
+input clk;
 input [15:0] ReadAddress;
 
 output [31:0] Instruction;
@@ -13,7 +15,7 @@ reg [7:0] a1,a2,a3,a4;
 
 initial $readmemb(filename,Mem); 
 
-always @(ReadAddress) begin
+always @(posedge clk) begin
   a1 = Mem[ReadAddress];
   a2 = Mem[ReadAddress+1];
   a3 = Mem[ReadAddress+2];

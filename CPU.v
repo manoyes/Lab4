@@ -1,22 +1,24 @@
-module CPU(clk);
+module CPU;
+  
+  `include "parameters.v"
 
-  input clk;
+  reg clk;
 
   reg rst;
 
-  wire [15:0] NewPC;
-  wire [15:0] OldPC;
-  wire [15:0] PC_4;
-  wire [31:0] Instruction;
-  wire [15:0] WriteData;
-  wire [15:0] ReadData1;
-  wire [15:0] ReadData2;
+  wire [ADDR_WIDTH-1:0] NewPC;
+  wire [ADDR_WIDTH-1:0] OldPC;
+  wire [ADDR_WIDTH-1:0] PC_4;
+  wire [INST_WIDTH-1:0] Instruction;
+  wire [ADDR_WIDTH-1:0] WriteData;
+  wire [ADDR_WIDTH-1:0] ReadData1;
+  wire [ADDR_WIDTH-1:0] ReadData2;
   
-  wire [15:0] ReadData;
+  wire [ADDR_WIDTH-1:0] ReadData;
   
-  wire [15:0] ALUResult;
+  wire [ADDR_WIDTH-1:0] ALUResult;
   
-  wire [15:0] ALUIn2;
+  wire [ADDR_WIDTH-1:0] ALUIn2;
 
   wire RegDst;
   wire Branch;
@@ -28,7 +30,7 @@ module CPU(clk);
   wire RegWrite;
   wire Jump;
 
-  wire [5:0] ALUOperation;
+  wire [OP_SIZE-1:0] ALUOperation;
   wire Zero;
 
   wire mode;
@@ -39,22 +41,29 @@ module CPU(clk);
   
   initial begin
     rst = 0;
+    clk = 0;
   end  
+  
+  always
+    #40 clk = !clk;
   
   Program_Counter     PC(.clk           (clk),
                          .rst           (rst),
                          .NewAddress    (NewPC),
                          .ReadAddress   (OldPC));
                          
-  mux2to1 pcChange (.in1    (OldPC + 16'b0000000000000100),
+  mux2to1 pcChange (.clk    (clk),
+    	               .in1    (OldPC + 16'b0000000000000100),
                     .in2    ((OldPC + 16'b0000000000000100) + (Instruction[15:0] << 2)),
                     .sel    (Branch & Zero),
                     .out    (NewPC));
                      
-  Instruction_memory  IM(.ReadAddress   (OldPC), 
+  Instruction_memory  IM(.clk           (clk),
+                         .ReadAddress   (OldPC), 
                          .Instruction   (Instruction));
   
-  RegFile  RF(.rst           (rst), 
+  RegFile  RF(.clk           (clk),
+              .rst           (rst), 
               .ReadRgAddr1   (Instruction[25:21]), 
               .ReadRgAddr2   (Instruction[20:16]), 
               .WriteRgAddr   (RegDst ? Instruction[15:11] : Instruction[20:16]), 
@@ -62,7 +71,8 @@ module CPU(clk);
               .ReadData1     (ReadData1), 
               .ReadData2     (ReadData2));
 
-  Control control (.Opcode    (Instruction[31:26]), 
+  Control control (.clk       (clk),
+                   .Opcode    (Instruction[31:26]), 
                    .RegDst    (RegDst), 
                    .Branch    (Branch), 
                    .MemRead   (MemRead), 
@@ -73,21 +83,27 @@ module CPU(clk);
                    .RegWrite  (RegWrite),
                    .Jump      (Jump));              
   
-  ALU_Control alu_control (.ALUOp       (ALUOp),
+  ALU_Control alu_control (.clk         (clk),
+                           .ALUOp       (ALUOp),
                            .Function    (Instruction[5:0]),
                            .Operation   (ALUOperation));
   
-  ALU alu(.in1            (ReadData1), 
+  ALU alu(.clk             (clk),
+          .in1            (ReadData1), 
           .in2            (ALUSrc ? Instruction[15-0] : ReadData2), 
           .ALUOperation   (ALUOperation), 
           .Zero           (Zero),
           .ALUResult      (ALUResult));
           
-  Data_memory DM(.MemRead     (MemRead), 
+  Data_memory DM(.clk         (clk),
+                 .MemRead     (MemRead), 
                  .MemWrite    (MemWrite),
                  .Address     (ALUResult), 
                  .WriteData   (ReadData2),
                  .ReadData    (ReadData),
                  .mode        (mode));
+
+initial
+  $monitor($time, "PC=%b ALUResult=%b", OldPC, ALUResult);
 
 endmodule

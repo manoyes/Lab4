@@ -1,13 +1,19 @@
 module Program_Counter(clk, rst, NewAddress, ReadAddress);
+  
+  `include "parameters.v"
+  
   input clk;
   input rst;
   
-  input [15:0] NewAddress;
-  output [15:0] ReadAddress;
+  input [ADDR_WIDTH-1:0] NewAddress;
+  output [ADDR_WIDTH-1:0] ReadAddress;
   
-  reg [15:0] ReadAddress;
-  reg [31:0] inst_address;
+  reg [ADDR_WIDTH-1:0] ReadAddress;
+  reg [INST_WIDTH-1:0] inst_address;
   
+  initial begin
+    inst_address = 0;
+  end
   
   always @(posedge clk) begin
     if (rst)

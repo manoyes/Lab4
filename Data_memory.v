@@ -1,6 +1,6 @@
-`timescale 1ps / 1ps
-module Data_memory(MemRead, MemWrite, Address, WriteData, ReadData, mode);
+module Data_memory(clk, MemRead, MemWrite, Address, WriteData, ReadData, mode);
 
+input clk;
 input [15:0] Address;
 input [15:0] WriteData;
 input MemRead, MemWrite;

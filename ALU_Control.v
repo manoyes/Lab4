@@ -1,27 +1,31 @@
-module ALU_Control(ALUOp, Function, Operation);
+module ALU_Control(clk, ALUOp, Function, Operation);
+
+  `include "parameters.v"
+
+  input clk;
   input [1:0] ALUOp;  
-  input [5:0] Function;
+  input [FUNC_SIZE-1:0] Function;
   
-  output [5:0] Operation;
+  output [OP_SIZE-1:0] Operation;
   
-  reg [5:0] Operation;
+  reg [OP_SIZE-1:0] Operation;
   
   always @(ALUOp or Function) begin
     case (ALUOp)
       2'b00 : begin // Load/Store
-        Operation = 6'b000001; // ADD
+        Operation = ALU_ADD; // ADD
       end
       2'b01 : begin // Branch
-        Operation = 6'b000010; // SUB
+        Operation = ALU_SUB; // SUB
       end
       2'b10 : begin // R-type
         case (Function)
-          6'b100000 : Operation = 6'b000001; // ADD					
-          6'b100010 : Operation = 6'b000010; // SUB
-          6'b100100 : Operation = 6'b000011; // AND
-          6'b100111 : Operation = 6'b000100; // NOR
-          6'b100101 : Operation = 6'b000101; // OR        
-          6'b101010 : Operation = 6'b001000; // SLT
+            F_ADD : Operation = ALU_ADD;					
+            F_SUB : Operation = ALU_SUB; 
+            F_AND : Operation = ALU_AND;
+            F_NOR : Operation = ALU_NOR;
+            F_OR : Operation = ALU_OR;        
+            F_SLT : Operation = ALU_SLT;
         
           //6'b011010 : Operation = 6'b001011; // div	
           //6'b011000 : Operation = 6'b001100; // mult       				

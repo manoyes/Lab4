@@ -1,24 +1,47 @@
-module RegFile(rst, ReadRgAddr1, ReadRgAddr2, WriteRgAddr, WriteData, ReadData1, ReadData2);
+module RegFile(clk, rst, ReadRgAddr1, ReadRgAddr2, WriteRgAddr, WriteData, ReadData1, ReadData2);
+  
+  `include "parameters.v"
   
 // ===== INPUTS =====
+input clk;
 input rst;
-input [4:0] ReadRgAddr1;
-input [4:0] ReadRgAddr2;
-input [4:0] WriteRgAddr;
-input [15:0] WriteData;
+input [REG_ADDR_WIDTH-1:0] ReadRgAddr1;
+input [REG_ADDR_WIDTH-1:0] ReadRgAddr2;
+input [REG_ADDR_WIDTH-1:0] WriteRgAddr;
+input [ADDR_WIDTH-1:0] WriteData;
 
 // ===== OUTPUTS =====  
 
 output ReadData1;
 output ReadData2;
 
-reg [15:0] ReadData1;
-reg [15:0] ReadData2;
+reg [ADDR_WIDTH-1:0] ReadData1;
+reg [ADDR_WIDTH-1:0] ReadData2;
 
-reg [15:0] datastore[15:0]; // Memory storage
+reg [REG_SIZE-1:0] datastore[ADDR_WIDTH-1:0]; // Memory storage
+
+initial // we will put some values in the registers to test the ALU
+begin
+datastore[4'b0000] = 0;
+datastore[4'b0001] = 10;
+datastore[4'b0010] = 20;
+datastore[4'b0011] = 30;
+datastore[4'b0100] = 40;
+datastore[4'b0101] = 50;
+datastore[4'b0110] = 60;
+datastore[4'b0111] = 70;
+datastore[4'b1000] = 80;
+datastore[4'b1001] = 90;
+datastore[4'b1010] = 100;
+datastore[4'b1011] = 110;
+datastore[4'b1100] = 120;
+datastore[4'b1101] = 500;
+datastore[4'b1110] = 140;
+datastore[4'b1111] = 9999;
+end
 
   // WRITE TO DATA STORE
-  always @ (ReadRgAddr1) begin    
+  always @ (posedge clk) begin    
     
     datastore[4'b0000] = 16'b0000000000000000;
     

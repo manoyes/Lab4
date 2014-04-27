@@ -1,29 +1,9 @@
-`timescale 1ps / 1ps
-module ALU(in1, in2, ALUOperation, Zero, ALUResult);
+module ALU(clk, in1, in2, ALUOperation, Zero, ALUResult);
 
-/*
-initial // we will put some values in the registers to test the ALU
-begin
-Registers[4'b0000] = 0;
-Registers[4'b0001] = 10;
-Registers[4'b0010] = 20;
-Registers[4'b0011] = 30;
-Registers[4'b0100] = 40;
-Registers[4'b0101] = 50;
-Registers[4'b0110] = 60;
-Registers[4'b0111] = 70;
-Registers[4'b1000] = 80;
-Registers[4'b1001] = 90;
-Registers[4'b1010] = 100;
-Registers[4'b1011] = 110;
-Registers[4'b1100] = 120;
-Registers[4'b1101] = 500;
-Registers[4'b1110] = 140;
-Registers[4'b1111] = 9999;
-end
-*/
-
+ `include "parameters.v"
+ 
   // ===== INPUTS =====
+  input clk;
   input [15:0] in1;
   input [15:0] in2;
   input [5:0] ALUOperation;
@@ -35,16 +15,16 @@ end
   reg Zero;
   reg [15:0] ALUResult;
 
-  always @(in1 or in2 or ALUOperation) begin
+  always @(posedge clk) begin
 
     case (ALUOperation)
-      6'b000001 : ALUResult = in1 + in2; // ADD, ADDI, LB, LH, SB, SH
-      6'b000010 : ALUResult = in1 - in2; // SUB, BEQ, BGEZ
-      6'b000011 : ALUResult = in1 & in2; // AND, ANDI
-      6'b000100 : ALUResult = ~(in1 | in2); // NOR
-      6'b000101 : ALUResult = in1 | in2; // OR, ORI
-      6'b000111 : ALUResult = in2; // LUI
-      6'b001000 : ALUResult = (in1 < in2)? 1 : 0; // SLT, SLTI
+      ALU_ADD : ALUResult = in1 + in2; // ADD, ADDI, LB, LH, SB, SH
+      ALU_SUB : ALUResult = in1 - in2; // SUB, BEQ, BGEZ
+      ALU_AND : ALUResult = in1 & in2; // AND, ANDI
+      ALU_NOR : ALUResult = ~(in1 | in2); // NOR
+      ALU_OR : ALUResult = in1 | in2; // OR, ORI
+      ALU_LUI : ALUResult = in2; // LUI
+      ALU_SLT : ALUResult = (in1 < in2)? 1 : 0; // SLT, SLTI
       //6'b001001 : ALUResult = (in1 == in2) ? 1 : 0; // BEQ
       //6'b001010 : Zero = (in1 >= in2) ? 1 : 0; // BGEZ
       //6'b000000 : ALUResult = in1 + in2; // LB
