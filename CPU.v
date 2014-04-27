@@ -45,18 +45,12 @@ module CPU;
   end  
   
   always
-    #40 clk = !clk;
+    #10 clk = !clk;
   
   Program_Counter     PC(.clk           (clk),
                          .rst           (rst),
-                         .NewAddress    (NewPC),
+                         .NewAddress    ((Branch & Zero) ? (OldPC + 4) + (Instruction[15:0] << 2) :  (OldPC + 4)),
                          .ReadAddress   (OldPC));
-                         
-  mux2to1 pcChange (.clk    (clk),
-    	               .in1    (OldPC + 16'b0000000000000100),
-                    .in2    ((OldPC + 16'b0000000000000100) + (Instruction[15:0] << 2)),
-                    .sel    (Branch & Zero),
-                    .out    (NewPC));
                      
   Instruction_memory  IM(.clk           (clk),
                          .ReadAddress   (OldPC), 
@@ -104,6 +98,6 @@ module CPU;
                  .mode        (mode));
 
 initial
-  $monitor($time, "PC=%b ALUResult=%b", OldPC, ALUResult);
+  $monitor($time, "PC=%b ALUResult=%b Instruction=%b ALUResult=%b", OldPC, ALUResult, Instruction, ALUResult);
 
 endmodule

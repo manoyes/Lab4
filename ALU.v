@@ -4,20 +4,20 @@ module ALU(clk, in1, in2, ALUOperation, Zero, ALUResult);
  
   // ===== INPUTS =====
   input clk;
-  input [15:0] in1;
-  input [15:0] in2;
-  input [5:0] ALUOperation;
+  input signed [ADDR_WIDTH-1:0] in1;
+  input signed [ADDR_WIDTH-1:0] in2;
+  input [OP_SIZE-1:0] ALUOperation;
 
   // ===== OUTPUTS =====
   output Zero;
-  output ALUResult;
+  output signed [ADDR_WIDTH-1:0] ALUResult;
 
   reg Zero;
-  reg [15:0] ALUResult;
+  reg [ADDR_WIDTH-1:0] ALUResult;
 
   always @(posedge clk) begin
 
-    case (ALUOperation)
+    #4 case (ALUOperation)
       ALU_ADD : ALUResult = in1 + in2; // ADD, ADDI, LB, LH, SB, SH
       ALU_SUB : ALUResult = in1 - in2; // SUB, BEQ, BGEZ
       ALU_AND : ALUResult = in1 & in2; // AND, ANDI
@@ -44,6 +44,7 @@ module ALU(clk, in1, in2, ALUOperation, Zero, ALUResult);
     
     Zero = (ALUResult == 0) ? 1 : 0; // BEQ, BEGZ
   
+    $display("ALUResult=%b",ALUResult);
   end
 endmodule
 

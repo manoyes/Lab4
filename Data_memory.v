@@ -18,7 +18,7 @@ initial begin
   a2 = 0;
 end
 
-always @(Address) begin
+always @(posedge clk) begin
 if(Address!=0)
 	if(MemRead==1)
 	begin

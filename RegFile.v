@@ -43,8 +43,8 @@ end
   // WRITE TO DATA STORE
   always @ (posedge clk) begin    
     
-    datastore[4'b0000] = 16'b0000000000000000;
-    
+    #3 datastore[4'b0000] = 16'b0000000000000000;
+    $display("ReadRgAddr1=%b",ReadRgAddr1); 
     if (rst) begin
       datastore[1] = 16'b0000000000000000;
       datastore[2] = 16'b0000000000000000;
@@ -63,7 +63,7 @@ end
       datastore[15] = 16'b0000000000000000;
     end
         
-    if (WriteRgAddr > 4'b0000) // R0 is hardwired to 0, writing to it discards the value.
+    #7 if (WriteRgAddr > 4'b0000) // R0 is hardwired to 0, writing to it discards the value.
         datastore[WriteRgAddr] = WriteData; 
     
     ReadData1 = datastore[ReadRgAddr1];
@@ -71,4 +71,6 @@ end
     
   end
   
+//always @(ReadRgAddr1) 
+ // $display("ReadRgAddr1=%b",ReadRgAddr1);  
 endmodule

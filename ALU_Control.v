@@ -11,12 +11,12 @@ module ALU_Control(clk, ALUOp, Function, Operation);
   reg [OP_SIZE-1:0] Operation;
   
   always @(ALUOp or Function) begin
-    case (ALUOp)
+    #3 case (ALUOp)
       2'b00 : begin // Load/Store
-        Operation = ALU_ADD; // ADD
+          Operation = ALU_ADD; // ADD
       end
       2'b01 : begin // Branch
-        Operation = ALU_SUB; // SUB
+          Operation = ALU_SUB; // SUB
       end
       2'b10 : begin // R-type
         case (Function)

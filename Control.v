@@ -44,7 +44,7 @@ always @(posedge clk) begin
   endcase
 end
 
-assign RegDst   = control_bits[0];
+assign #2 RegDst   = control_bits[0];
 assign ALUSrc   = control_bits[1];
 assign MemtoReg = control_bits[2];
 assign RegWrite = control_bits[3];
