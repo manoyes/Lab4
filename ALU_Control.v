@@ -17,7 +17,10 @@ module ALU_Control(clk, ALUOp, Function, Opcode, Operation);
           Operation = ALU_ADD; // ADD
       end
       2'b01 : begin // Branch
-          Operation = ALU_SUB; // SUB
+        case (Opcode)
+            OP_BEQ  : Operation = ALU_SUB; // BEQ
+            OP_BGEZ : Operation = ALU_BGEZ; // BEQ
+        endcase
       end
       2'b10 : begin // R-type
         case (Function)
@@ -28,10 +31,10 @@ module ALU_Control(clk, ALUOp, Function, Opcode, Operation);
             F_OR : Operation = ALU_OR;        
             F_SLT : Operation = ALU_SLT;
         
-          //F_DIV : Operation = ALU_DIV; // div	
-          //F_MULT : Operation = ALU_MULT; // mult       				
-          //F_MFHI : Operation = ALU_MFHI; // mfhi
-          //F_MFLO : Operation = ALU_MFLO; // mflo
+            F_DIV : Operation = ALU_DIV; // div	
+            F_MULT : Operation = ALU_MULT; // mult       				
+            F_MFHI : Operation = ALU_MFHI; // mfhi
+            F_MFLO : Operation = ALU_MFLO; // mflo
             F_SLL : Operation = ALU_SLL; // sll
             F_SRL : Operation = ALU_SRL; // srl
           //6'b001000 : Operation = 6'b000001; // jr, jal

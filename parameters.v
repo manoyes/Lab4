@@ -51,3 +51,6 @@ parameter ALU_MULT = 6'b001100;
 parameter ALU_DIV = 6'b001011;
 parameter ALU_MFHI = 6'b001101;
 parameter ALU_MFLO = 6'b001110;
+
+parameter MODE_BYTE = 1'b0;
+parameter MODE_HALFWORD = 1'b1;

@@ -1,4 +1,4 @@
-module Control(clk, Opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite, Jump);
+module Control(clk, Opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite, Jump, mode);
 
  `include "parameters.v"
  
@@ -14,33 +14,34 @@ output MemWrite;
 output ALUSrc;
 output RegWrite;
 output Jump;
+output mode;
 
-reg [0:9] control_bits;
+reg [0:10] control_bits;
 
 initial
-control_bits = 10'b0000000000;
+  control_bits = 11'b00000000000;
 
 always @(Opcode) begin
   case (Opcode)
-    OP_RTYPE: control_bits = 10'b1001000010; // R-type (Do I need 10'b1001000110 for jr?)
+    OP_RTYPE: control_bits = 11'b10010000100; // R-type (Do I need 10'b1001000110 for jr?)
    	
-   	OP_LB:    control_bits = 10'b0111100000;	//lb
-		OP_LH:    control_bits = 10'b0111100000;	//lh
+   	OP_LB:    control_bits = 11'b01111000000;	//lb
+		OP_LH:    control_bits = 11'b01111000001;	//lh
 
-		OP_SB:    control_bits = 10'b0100010000;	//sb
-		OP_SH:    control_bits = 10'b0100010000;	//sh
+		OP_SB:    control_bits = 11'b01000100000;	//sb
+		OP_SH:    control_bits = 11'b01000100001;	//sh
 
-		OP_BEQ:   control_bits = 10'b0000001001;	//beq
-		OP_BGEZ:  control_bits = 10'b0000001001;	//bgez
+		OP_BEQ:   control_bits = 11'b00000010010;	//beq
+		OP_BGEZ:  control_bits = 11'b00000010010;	//bgez
     
-    OP_ADDI:  control_bits = 10'b0101000011;	//I-type addi
-		OP_ORI:   control_bits = 10'b0101000011; //I-type ORi
-		OP_ANDI:  control_bits = 10'b0101000011;	//I-type andi
-		OP_SLTI:  control_bits = 10'b0101000011;	//I-type slti
-		OP_LUI:   control_bits = 10'b0101000011;	//I-type lui
+    OP_ADDI:  control_bits = 11'b01010000110;	//I-type addi
+		OP_ORI:   control_bits = 11'b01010000110; //I-type ORi
+		OP_ANDI:  control_bits = 11'b01010000110;	//I-type andi
+		OP_SLTI:  control_bits = 11'b01010000110;	//I-type slti
+		OP_LUI:   control_bits = 11'b01010000110;	//I-type lui		
     
-  		OP_J:     control_bits = 10'b0000000100;	//j
-		//6'b000011: control_bits = 10'b0000000100;	//jal
+  		OP_J:     control_bits = 11'b00000001000;	//j
+		//6'b000011: control_bits = 11'b00000001000;	//jal
   endcase
 end
 
@@ -53,5 +54,6 @@ assign MemWrite = control_bits[5];
 assign Branch   = control_bits[6];
 assign Jump     = control_bits[7];
 assign ALUOp    = control_bits[8:9];
+assign mode     = control_bits[10];
 
 endmodule

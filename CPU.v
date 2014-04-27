@@ -49,7 +49,7 @@ module CPU;
   
   Program_Counter     PC(.clk           (clk),
                          .rst           (rst),
-                         .NewAddress    ((Branch & Zero) ? (OldPC + 4) + (Instruction[15:0] << 2) :  (OldPC + 4)),
+                         .NewAddress    (Jump ? {OldPC + 4, Instruction[25:0] << 2} : ((Branch & Zero) ? (OldPC + 4) + (Instruction[15:0] << 2) :  (OldPC + 4))),
                          .ReadAddress   (OldPC));
                      
   Instruction_memory  IM(.clk           (clk),
@@ -75,7 +75,8 @@ module CPU;
                    .MemWrite  (MemWrite), 
                    .ALUSrc    (ALUSrc), 
                    .RegWrite  (RegWrite),
-                   .Jump      (Jump));              
+                   .Jump      (Jump),
+                   .mode      (mode));              
   
   ALU_Control alu_control (.clk         (clk),
                            .ALUOp       (ALUOp),
