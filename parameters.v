@@ -22,6 +22,7 @@ parameter OP_ANDI = 6'b001100;
 parameter OP_SLTI = 6'b001010;
 parameter OP_LUI = 6'b001111;
 parameter OP_J = 	6'b000010;
+parameter OP_JAL = 6'b000011;
 
 parameter F_ADD = 6'b100000;					
 parameter F_SUB = 6'b100010; 
@@ -35,6 +36,7 @@ parameter F_MULT = 6'b011000;
 parameter F_DIV = 6'b011010;
 parameter F_MFHI = 6'b010000;
 parameter F_MFLO = 6'b010010;
+parameter F_JR = 6'b001000;
 
 parameter ALU_ADD = 6'b000001;
 parameter ALU_SUB = 6'b000010;
