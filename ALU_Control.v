@@ -23,13 +23,13 @@ module ALU_Control(ALUOp, Function, Operation);
           6'b100101 : Operation = 6'b000101; // OR        
           6'b101010 : Operation = 6'b001000; // SLT
         
-          6'b011010 : Operation = 6'b001011; // div	
-          6'b011000 : Operation = 6'b001100; // mult       				
-          6'b010000 : Operation = 6'b001101; // mfhi
-          6'b010010 : Operation = 6'b001110; // mflo
-          6'b000000 : Operation = 6'b001111; // sll
-          6'b000010 : Operation = 6'b010000; // srl
-          6'b001000 : Operation = 6'b000001; // jr, jal
+          //6'b011010 : Operation = 6'b001011; // div	
+          //6'b011000 : Operation = 6'b001100; // mult       				
+          //6'b010000 : Operation = 6'b001101; // mfhi
+          //6'b010010 : Operation = 6'b001110; // mflo
+          //6'b000000 : Operation = 6'b001111; // sll
+          //6'b000010 : Operation = 6'b010000; // srl
+          //6'b001000 : Operation = 6'b000001; // jr, jal
         endcase
       end
     endcase

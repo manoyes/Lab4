@@ -26,7 +26,7 @@ end
   // ===== INPUTS =====
   input [15:0] in1;
   input [15:0] in2;
-  input [3:0] ALUOperation;
+  input [5:0] ALUOperation;
 
   // ===== OUTPUTS =====
   output Zero;
@@ -55,14 +55,14 @@ end
       //6'b001100 : ALUResult = in1 * in2; // MULT
       //6'b001101 : ALUResult = Prod_reg[31:16]; // MFHI
       //6'b001110 : ALUResult = Prod_reg[15:0]; // MFLO
-      6'b001111 : ALUResult = in1 << in2; // SLL
-      6'b010000 : ALUResult = in1 >> in2; // SRL
+      //6'b001111 : ALUResult = in1 << in2; // SLL
+      //6'b010000 : ALUResult = in1 >> in2; // SRL
       //6'b000000 : ALUResult = in1 + in2; // JR
      //6'b000000 : ALUResult = in1 + in2; // JAL
   
     endcase 
     
-    Zero = (ALUResult == 0) ? 1 : 0;
+    Zero = (ALUResult == 0) ? 1 : 0; // BEQ, BEGZ
   
   end
 endmodule

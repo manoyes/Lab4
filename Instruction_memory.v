@@ -5,7 +5,8 @@ input [15:0] ReadAddress;
 
 output [31:0] Instruction;
 
-parameter filename = "All_inst.txt";
+//parameter filename = "All_inst.txt";
+parameter filename = "test.txt";
 
 reg [7:0] Mem[0:65535];
 reg [7:0] a1,a2,a3,a4;

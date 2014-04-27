@@ -1,10 +1,10 @@
-module memory(rst, ReadRgAddr1, ReadRgAddr2, WriteRgAddr, WriteData, ReadData1, ReadData2);
+module RegFile(rst, ReadRgAddr1, ReadRgAddr2, WriteRgAddr, WriteData, ReadData1, ReadData2);
   
 // ===== INPUTS =====
 input rst;
-input [3:0] ReadRgAddr1;
-input [3:0] ReadRgAddr2;
-input [3:0] WriteRgAddr;
+input [4:0] ReadRgAddr1;
+input [4:0] ReadRgAddr2;
+input [4:0] WriteRgAddr;
 input [15:0] WriteData;
 
 // ===== OUTPUTS =====  

@@ -1,4 +1,4 @@
-module Control(Opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite);
+module Control(Opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite, Jump);
 
 input [5:0] Opcode;
 
@@ -10,6 +10,7 @@ output [1:0]ALUOp;
 output MemWrite;
 output ALUSrc;
 output RegWrite;
+output Jump;
 
 reg [0:9] control_bits;
 
