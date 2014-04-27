@@ -25,7 +25,7 @@ initial
 
 always @(posedge clk) begin
   #2 case (Opcode)
-    OP_RTYPE: control_bits = 12'b100100001000; // R-type (Do I need 10'b1001000110 for jr?)
+    OP_RTYPE: control_bits = 12'b100100001000; // R-type
    	
    	OP_LB   :   control_bits = 12'b011110000000;	//lb
 		OP_LH   :   control_bits = 12'b011110000001;	//lh

@@ -7,10 +7,8 @@ input [ADDR_WIDTH-1:0] ReadAddress;
 
 output [INST_WIDTH-1:0] Instruction;
 
-parameter filename = "All_inst.txt";
-//parameter filename = "beq_and_jump_tests.txt";
-//parameter filename  = "test_fact.txt";
-//parameter filename = "test.txt";
+//parameter filename = "All_inst.txt";
+parameter filename  = "test_fact.txt";
 
 reg [MEM_WIDTH-1:0] Mem[0:65535];
 reg [MEM_WIDTH-1:0] a1,a2,a3,a4;
