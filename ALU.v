@@ -1,4 +1,4 @@
-module ALU(clk, in1, in2, ALUOperation, Zero, ALUResult);
+module ALU(clk, in1, in2, ALUOperation, Zero, ALUResult, shamt);
 
  `include "parameters.v"
  
@@ -7,6 +7,7 @@ module ALU(clk, in1, in2, ALUOperation, Zero, ALUResult);
   input signed [ADDR_WIDTH-1:0] in1;
   input signed [ADDR_WIDTH-1:0] in2;
   input [OP_SIZE-1:0] ALUOperation;
+  input [4:0] shamt;
 
   // ===== OUTPUTS =====
   output Zero;
@@ -32,13 +33,13 @@ module ALU(clk, in1, in2, ALUOperation, Zero, ALUResult);
       ALU_MULT : Prod_reg = in1 * in2; // MULT
       ALU_MFHI : ALUResult = Prod_reg[31:16]; // MFHI
       ALU_MFLO : ALUResult = Prod_reg[15:0]; // MFLO
-      ALU_SLL : ALUResult = in1 << in2; // SLL
-      ALU_SRL : ALUResult = in1 >> in2; // SRL
+      ALU_SLL : ALUResult = in2 << shamt; // SLL
+      ALU_SRL : ALUResult = in2 >> shamt; // SRL
       //6'b000000 : ALUResult = in1 + in2; // JR
      //6'b000000 : ALUResult = in1 + in2; // JAL
   
     endcase
   
-    $display("in1: %d in2: %d ALUResult=%d",in1, in2,$signed(ALUResult));
+    $display("in1: %d in2: %d shamt: %d ALUResult=%d",in1, in2, shamt,$signed(ALUResult));
   end
 endmodule

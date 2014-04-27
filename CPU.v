@@ -106,7 +106,8 @@ module CPU;
           .in2            (ALUSrc ? Instruction[15:0] : ReadData2), 
           .ALUOperation   (ALUOperation), 
           .Zero           (Zero),
-          .ALUResult      (ALUResult));
+          .ALUResult      (ALUResult),
+          .shamt          (Instruction[10:6]));
           
   Data_memory DM(.clk         (clk),
                  .MemRead     (MemRead), 
