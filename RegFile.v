@@ -1,4 +1,4 @@
-module RegFile(clk, rst, ReadRgAddr1, ReadRgAddr2, WriteRgAddr, WriteData, ReadData1, ReadData2, RegWrite);
+module RegFile(clk, rst, ReadRgAddr1, ReadRgAddr2, WriteRgAddr, WriteData, ReadData1, ReadData2, RegWrite, Opcode);
   
   `include "parameters.v"
   
@@ -10,6 +10,7 @@ input [REG_ADDR_WIDTH-1:0] ReadRgAddr2;
 input [REG_ADDR_WIDTH-1:0] WriteRgAddr;
 input [ADDR_WIDTH-1:0] WriteData;
 input RegWrite;
+input [5:0] Opcode;
 
 // ===== OUTPUTS =====  
 
@@ -71,7 +72,10 @@ end
     $display("Reading register %d is: %d, register %d is: %d", ReadRgAddr1, ReadData1, ReadRgAddr2, ReadData2);  
     
     if (WriteRgAddr > 4'b0000 && RegWrite) // R0 is hardwired to 0, writing to it discards the value.
-        #5 datastore[WriteRgAddr] = WriteData; 
+        #5 if (Opcode == OP_JAL)
+            datastore[RETURN_REGISTER] = WriteData;
+        else
+              datastore[WriteRgAddr] = WriteData; 
         $display("Updated register %d is: %d", WriteRgAddr, datastore[WriteRgAddr]);
     
   end

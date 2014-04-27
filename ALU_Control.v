@@ -37,6 +37,8 @@ module ALU_Control(clk, ALUOp, Function, Opcode, Operation);
             F_MFLO : Operation = ALU_MFLO;
             F_SLL  : Operation = ALU_SLL;
             F_SRL  : Operation = ALU_SRL;
+            
+            F_JR   : Operation = ALU_ADD;
           //6'b001000 : Operation = 6'b000001; // jr, jal
         endcase
       end

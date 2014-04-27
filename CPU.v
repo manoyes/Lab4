@@ -29,6 +29,7 @@ module CPU;
   wire ALUSrc;
   wire RegWrite;
   wire Jump;
+  wire JumpFromReg;
 
   wire [OP_SIZE-1:0] ALUOperation;
   wire Zero;
@@ -59,7 +60,9 @@ module CPU;
                           .Branch       (Branch),
                           .Zero         (Zero),
                           .BranchOffset (Instruction[15:0]),
-                          .NewPC        (NewPC));
+                          .NewPC        (NewPC),
+                          .JumpFromReg  (JumpFromReg),
+                          .ReadData1    (ReadData1));
                                                    
                      
   Instruction_memory  IM(.clk           (clk),
@@ -74,16 +77,20 @@ module CPU;
               .WriteData     (WriteData), 
               .ReadData1     (ReadData1), 
               .ReadData2     (ReadData2),
-              .RegWrite      (RegWrite));
+              .RegWrite      (RegWrite),
+              .Opcode        (Instruction[31:26]));
 
   MemToRegMux M2RM(.clk       (clk),
+                   .Opcode    (Instruction[31:26]), 
                    .ReadData  (ReadData),
                    .ALUResult (ALUResult),
                    .MemtoReg  (MemtoReg),
+                   .LinkAddress (OldPC + 4),
                    .WriteData (WriteData));
 
   Control control (.clk       (clk),
                    .Opcode    (Instruction[31:26]), 
+                   .Function  (Instruction[5:0]),
                    .RegDst    (RegDst), 
                    .Branch    (Branch), 
                    .MemRead   (MemRead), 
@@ -93,6 +100,7 @@ module CPU;
                    .ALUSrc    (ALUSrc), 
                    .RegWrite  (RegWrite),
                    .Jump      (Jump),
+                   .JumpFromReg (JumpFromReg),
                    .mode      (mode));              
   
   ALU_Control alu_control (.clk         (clk),
