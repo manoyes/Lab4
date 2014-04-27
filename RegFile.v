@@ -43,7 +43,7 @@ end
   // WRITE TO DATA STORE
   always @ (posedge clk) begin    
     
-    #3 datastore[4'b0000] = 16'b0000000000000000;
+    datastore[4'b0000] = 16'b0000000000000000;
     //$display("ReadRgAddr1=%b ReadRgAddr2=%b WriteRgAddr=%b",ReadRgAddr1,ReadRgAddr2,WriteRgAddr); 
     //$display("Register 0110 is: %b",datastore[4'b0110]);    
         
@@ -65,17 +65,13 @@ end
       datastore[15] = 16'b0000000000000000;
     end
     
-    ReadData1 = datastore[ReadRgAddr1];
-    ReadData2 = datastore[ReadRgAddr2];    
+    #4 ReadData1 = datastore[ReadRgAddr1];
+    ReadData2 = datastore[ReadRgAddr2];  
+    $display("Reading register %d is: %d, register %d is: %d", ReadRgAddr1, ReadData1, ReadRgAddr2, ReadData2);  
+    
+    if (WriteRgAddr > 4'b0000) // R0 is hardwired to 0, writing to it discards the value.
+        #5 datastore[WriteRgAddr] = WriteData; 
+        $display("Updated register %d is: %d", WriteRgAddr, datastore[WriteRgAddr]);
     
   end
-  
-  always @(WriteData) begin
-    if (WriteRgAddr > 4'b0000) // R0 is hardwired to 0, writing to it discards the value.
-        datastore[WriteRgAddr] = WriteData; 
-    $display("Updated register %d is: %d", WriteRgAddr, datastore[WriteRgAddr]);
-  end
-  
-//always @(ReadRgAddr1) 
- // $display("ReadRgAddr1=%b",ReadRgAddr1);  
 endmodule

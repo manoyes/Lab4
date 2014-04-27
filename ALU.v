@@ -18,7 +18,7 @@ module ALU(clk, in1, in2, ALUOperation, Zero, ALUResult);
 
   always @(posedge clk) begin
 
-    #4 case (ALUOperation)
+    #5 case (ALUOperation)
       ALU_ADD : ALUResult = in1 + in2; // ADD, ADDI, LB, LH, SB, SH
       ALU_SUB : ALUResult = in1 - in2; // SUB
       ALU_AND : ALUResult = in1 & in2; // AND, ANDI

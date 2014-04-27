@@ -25,11 +25,11 @@ always @(posedge clk) begin
     if(MemRead==1) begin		
       if(mode==MODE_BYTE) begin
         //#5 a1 = Mem[Address];
-        #6 a1 = Mem[Address];
+        a1 = Mem[Address];
         $display("Byte read from address %d value %h",Address, a1);
       end else if (mode==MODE_HALFWORD) begin
         //#5 a1 = Mem[Address];
-        #6 a1 = Mem[Address];
+        a1 = Mem[Address];
         a2 = Mem[Address+1];
         $display("Halfword read from address %d value %h",Address, {a1, a2});
       end
@@ -38,14 +38,14 @@ always @(posedge clk) begin
 end
 
 always @(posedge clk) begin
-  if (MemWrite==1) begin
+  #6 if (MemWrite==1) begin
       if(mode==MODE_BYTE) begin
         //#5 Mem[Address] = WriteData[15:8];
-        #6 Mem[Address] = WriteData[15:8];
+        Mem[Address] = WriteData[15:8];
         $display("Byte write in address %d value %h",Address, WriteData[15:8]);
       end else if (mode==MODE_HALFWORD) begin
         //#5 Mem[Address] = WriteData[15:8];
-        #6 Mem[Address] = WriteData[15:8];
+        Mem[Address] = WriteData[15:8];
         Mem[Address+1] = WriteData[7:0];
         $display("Memory write in address %d value %h",Address, {WriteData[15:8], WriteData[7:0]});
       end

@@ -21,8 +21,8 @@ reg [0:10] control_bits;
 initial
   control_bits = 11'b00000000000;
 
-always @(Opcode) begin
-  case (Opcode)
+always @(posedge clk) begin
+  #2 case (Opcode)
     OP_RTYPE: control_bits = 11'b10010000100; // R-type (Do I need 10'b1001000110 for jr?)
    	
    	OP_LB:    control_bits = 11'b01111000000;	//lb
@@ -45,7 +45,7 @@ always @(Opcode) begin
   endcase
 end
 
-assign #2 RegDst   = control_bits[0];
+assign RegDst   = control_bits[0];
 assign ALUSrc   = control_bits[1];
 assign MemtoReg = control_bits[2];
 assign RegWrite = control_bits[3];

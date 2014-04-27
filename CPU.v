@@ -45,12 +45,22 @@ module CPU;
   end  
   
   always
-    #5 clk = !clk;
+    #10 clk = !clk;
   
   Program_Counter     PC(.clk           (clk),
                          .rst           (rst),
-                         .NewAddress    (Jump ? {OldPC + 4, Instruction[25:0] << 2} : ((Branch & Zero) ? (OldPC + 4) + (Instruction[15:0] << 2) :  (OldPC + 4))),
+                         .NewAddress    (NewPC),
                          .ReadAddress   (OldPC));
+
+  newAddressMux       NAM(.clk          (clk),
+                          .Jump         (Jump),
+                          .OldPC        (OldPC),
+                          .JumpOffset   (Instruction[25:0]),
+                          .Branch       (Branch),
+                          .Zero         (Zero),
+                          .BranchOffset (Instruction[15:0]),
+                          .NewPC        (NewPC));
+                                                   
                      
   Instruction_memory  IM(.clk           (clk),
                          .ReadAddress   (OldPC), 
@@ -61,9 +71,15 @@ module CPU;
               .ReadRgAddr1   (Instruction[25:21]), 
               .ReadRgAddr2   (Instruction[20:16]), 
               .WriteRgAddr   (RegDst ? Instruction[15:11] : Instruction[20:16]), 
-              .WriteData     (MemtoReg ? ReadData : ALUResult), 
+              .WriteData     (WriteData), 
               .ReadData1     (ReadData1), 
               .ReadData2     (ReadData2));
+
+  MemToRegMux M2RM(.clk       (clk),
+                   .ReadData  (ReadData),
+                   .ALUResult (ALUResult),
+                   .MemtoReg  (MemtoReg),
+                   .WriteData (WriteData));
 
   Control control (.clk       (clk),
                    .Opcode    (Instruction[31:26]), 
