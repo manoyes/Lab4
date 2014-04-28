@@ -8,7 +8,7 @@ input [ADDR_WIDTH-1:0] ReadAddress;
 output [INST_WIDTH-1:0] Instruction;
 
 //parameter filename = "All_inst.txt";
-parameter filename  = "test_fact.txt";
+parameter filename  = "factorial.txt";
 
 reg [MEM_WIDTH-1:0] Mem[0:65535];
 reg [MEM_WIDTH-1:0] a1,a2,a3,a4;
