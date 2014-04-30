@@ -1,3 +1,19 @@
+// -----------------------------------------------------------------------------
+// MODULE: ALU
+// -----------------------------------------------------------------------------
+// PURPOSE : 16-bit Arithmetic Logic Unit
+// -----------------------------------------------------------------------------
+// INPUTS
+// clk                 : system clock
+// in1          [15:0] : The first ALU operand
+// in2          [15:0] : The second ALU operand
+// ALUOperation [5:0]  : The control line specifying what operation to perform
+// shamt        [4:0]  : Amount to shift in2 (if necessary)
+// -----------------------------------------------------------------------------
+// OUTPUTS
+// Zero                : Whether or not in1 == in2 or in1 >= 0 (for branches)
+// ALUResult    [15:0] : The result of the operation performed on in1 and in2
+// -----------------------------------------------------------------------------
 module ALU(clk, in1, in2, ALUOperation, Zero, ALUResult, shamt);
 
  `include "parameters.v"
@@ -29,7 +45,10 @@ module ALU(clk, in1, in2, ALUOperation, Zero, ALUResult, shamt);
       ALU_SLT : ALUResult = (in1 < in2)? 1 : 0; // SLT, SLTI
       ALU_BEQ : Zero = (in1 == in2) ? 1 : 0; // BEQ
       ALU_BGEZ : Zero = (in1 >= 0) ? 1 : 0; // BGEZ
-      ALU_DIV : Prod_reg = in1 / in2; // DIV
+      ALU_DIV : begin 
+                Prod_reg[15:0] = in1 / in2; // DIV quotient
+                Prod_reg[31:16] = in1 % in2; // DIV remainder
+              end
       ALU_MULT : Prod_reg = in1 * in2; // MULT
       ALU_MFHI : ALUResult = Prod_reg[31:16]; // MFHI
       ALU_MFLO : ALUResult = Prod_reg[15:0]; // MFLO

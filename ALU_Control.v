@@ -1,12 +1,28 @@
+// -----------------------------------------------------------------------------
+// MODULE: ALU_Control
+// -----------------------------------------------------------------------------
+// PURPOSE : Converts instructions into simple ALU Operation codes.
+// -----------------------------------------------------------------------------
+// INPUTS
+// clk              : system clock
+// ALUOp      [1:0] : Control line, specifies branch, load/store, R-type, or I-type 
+// Function   [5:0] : The instruction's function code (R-type, etc.)
+// Opcode     [5:0] : The instruction's operation code (I-type, branches, etc.)
+// -----------------------------------------------------------------------------
+// OUTPUTS
+// Operation        : The ALU Operation to perform
+// -----------------------------------------------------------------------------
 module ALU_Control(clk, ALUOp, Function, Opcode, Operation);
 
   `include "parameters.v"
 
+  // ===== INPUTS =====
   input clk;
   input [1:0] ALUOp;  
   input [FUNC_SIZE-1:0] Function;
   input [OP_SIZE-1:0] Opcode;
   
+  // ===== OUTPUTS =====
   output [OP_SIZE-1:0] Operation;
   
   reg [OP_SIZE-1:0] Operation;

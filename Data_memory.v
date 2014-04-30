@@ -1,14 +1,33 @@
+// -----------------------------------------------------------------------------
+// MODULE: Data_memory
+// -----------------------------------------------------------------------------
+// PURPOSE : Memory storage for data
+// -----------------------------------------------------------------------------
+// INPUTS
+// clk                : system clock
+// Address     [15:0] : Address of memory to access
+// WriteData   [15:0] : The instruction's function code (R-type, etc.)
+// MemRead            : Whether data memory needs to be read
+// MemWrite           : Whether the data memory should be written to
+// mode               : Whether memory access should be a byte or a half-word
+// -----------------------------------------------------------------------------
+// OUTPUTS
+// ReadData    [15:0] : Data read from memory
+// -----------------------------------------------------------------------------
 module Data_memory(clk, MemRead, MemWrite, Address, WriteData, ReadData, mode);
 
 `include "parameters.v"
 
+// ===== INPUTS =====
 input clk;
 input [ADDR_WIDTH-1:0] Address;
 input [ADDR_WIDTH-1:0] WriteData;
-input MemRead, MemWrite;
+input MemRead;
+input MemWrite;
 input mode;
 
-output [ADDR_WIDTH:0] ReadData;
+// ===== OUTPUTS =====
+output [ADDR_WIDTH-1:0] ReadData;
 
 reg [MEM_WIDTH-1:0] Mem[0:2 << ADDR_WIDTH - 1];
 reg [MEM_WIDTH-1:0] a1,a2;
