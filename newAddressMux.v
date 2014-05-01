@@ -39,16 +39,16 @@ module newAddressMux (clk, Jump, OldPC, JumpOffset, Branch, Zero, BranchOffset, 
   input [15:0] ReadData1;
   
   // ===== OUTPUTS =====
-  output [31:0] NewPC;
+  output [15:0] NewPC;
   
-  reg [31:0] NewPC;
+  reg [15:0] NewPC;
   
   always @(posedge clk) begin 
     #9 if (Jump) begin
           if (JumpFromReg) begin
             NewPC = ReadData1; // jr
           end else begin
-            NewPC = {OldPC + 4, JumpOffset << 2}; // j or jal
+            NewPC = {JumpOffset << 2}; // j or jal
           end
        end else if (Branch & Zero) begin
           NewPC = (OldPC + 4) + (BranchOffset << 2); // branches

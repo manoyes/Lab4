@@ -96,7 +96,7 @@ module CPU;
                    .ReadData  (ReadData),
                    .ALUResult (ALUResult),
                    .MemtoReg  (MemtoReg),
-                   .LinkAddress (OldPC + 4),
+                   .LinkAddress (OldPC + 16'b0000000000000100),
                    .WriteData (WriteData));
 
   Control control (.clk       (clk),
